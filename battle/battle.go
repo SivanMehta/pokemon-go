@@ -26,7 +26,7 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) int {
 
   // use the actual battle damage formula to calculate damage
   // based on the physical / special split
-  // TODO: change 1 to .84 and all these ints to floats
+  // TODO: change 1 to .84 and all the ints to floats
   physicalDamage := (1 * base * attacker.Stats.Atk / defender.Stats.Def) + 2
   specialDamage := (1 * base * attacker.Stats.SpAtk / defender.Stats.SpDef) + 2
 
@@ -53,7 +53,7 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan int) {
   log.Println(a, a.Stats, b, b.Stats, atkA, atkB)
 
   for hpA > 0 && hpB > 0 {
-
+    // TODO: random multipliers
     if(aFaster) {
       hpB -= atkA
       if(hpB <= 0) {
