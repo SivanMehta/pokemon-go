@@ -32,8 +32,39 @@ type Pokemon struct {
   Stats Stats
 }
 
+// prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
   return fmt.Sprintf("%s, %s", p.Primary.Name, p.Secondary.Name)
+}
+
+// outputs damage multiplier of an attack, given a basepower
+func (p Pokemon) Multiplier(attack *PokeType, basepower int) int {
+  base := basepower
+  for i := 0; i < len(p.Primary.Weaknesses); i ++ {
+    if(attack == p.Primary.Weaknesses[i]) {
+      base *= 2
+    }
+  }
+
+  for i := 0; i < len(p.Secondary.Weaknesses); i ++ {
+    if(attack == p.Secondary.Weaknesses[i]) {
+      base *= 2
+    }
+  }
+
+  for i := 0; i < len(p.Primary.Resistances); i ++ {
+    if(attack == p.Primary.Resistances[i]) {
+      base /= 2
+    }
+  }
+
+  for i := 0; i < len(p.Secondary.Resistances); i ++ {
+    if(attack == p.Secondary.Resistances[i]) {
+      base /= 2
+    }
+  }
+
+  return base
 }
 
 var (
@@ -47,14 +78,26 @@ var (
   Dummies [population]*Pokemon
 )
 
+// for our purposes evs and ivs are all always maxed out
+// and we always have a neutral nature at level 100
+func hpStat() int {
+  base := rand.Intn(255)
+  return ((base + 31) + 4) + 100 + 10
+}
+
+func stat() int {
+  base := rand.Intn(255)
+  return ((base + 31) + 4) + 5
+}
+
 func generatePokemon() *Pokemon {
   stats := Stats{ 
-    HP: rand.Intn(255),
-    Atk: rand.Intn(255),
-    Def: rand.Intn(255),
-    SpAtk: rand.Intn(255),
-    SpDef: rand.Intn(255),
-    Speed: rand.Intn(255),
+    HP: hpStat(),
+    Atk: stat(),
+    Def: stat(),
+    SpAtk: stat(),
+    SpDef: stat(),
+    Speed: stat(),
   }
 
   types := [...]*PokeType{
