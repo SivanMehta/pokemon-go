@@ -5,7 +5,7 @@ import (
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
 
-const basePower = 12
+const basePower = 100
 
 // maximizing damage output considering the stats and typing
 // of the attacker and the defender
@@ -50,7 +50,7 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan int) {
   atkB := optimalAttack(b, a)
   aFaster := a.Stats.Speed > b.Stats.Speed
 
-  log.Println(a, b, atkA, atkB)
+  log.Println(a, a.Stats, b, b.Stats, atkA, atkB)
 
   for hpA > 0 && hpB > 0 {
 

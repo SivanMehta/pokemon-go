@@ -83,12 +83,12 @@ var (
 // and we always have a neutral nature at level 100
 func hpStat() int {
   base := rand.Intn(255)
-  return ((base + 31) + 4) + 100 + 10
+  return ((base + 31) * 2 + 4) + 100 + 10
 }
 
 func stat() int {
   base := rand.Intn(255)
-  return ((base + 31) + 4) + 5
+  return ((base + 31) * 2 + 4) + 5
 }
 
 func generatePokemon() *Pokemon {
