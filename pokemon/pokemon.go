@@ -6,7 +6,7 @@ import (
   "time"
 )
 
-const population = 20
+const population = 1000
 
 type PokeType struct {
   Name string
@@ -31,6 +31,7 @@ type Pokemon struct {
   Primary *PokeType
   Secondary *PokeType
   Stats Stats
+  fitness float64
 }
 
 // prints out primary and secondary type of a pokemon
