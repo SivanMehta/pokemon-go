@@ -10,5 +10,5 @@ func main() {
   result := battle.Add(1, 2)
   log.Println(result)
 
-  log.Println(pokemon.Steel)
+  log.Println(pokemon.Dummies)
 }
