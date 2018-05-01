@@ -3,6 +3,7 @@ package pokemon
 import (
   "math/rand"
   "fmt"
+  "time"
 )
 
 const population = 20
@@ -112,6 +113,7 @@ func generatePokemon() *Pokemon {
 }
 
 func init() {
+  rand.Seed(time.Now().UTC().UnixNano())
   Water.Name = "Water"
   Fire.Name = "Fire"
   Grass.Name = "Grass"

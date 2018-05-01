@@ -1,6 +1,7 @@
 package battle
 
 import (
+  "log"
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
 
@@ -49,7 +50,10 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan int) {
   atkB := optimalAttack(b, a)
   aFaster := a.Stats.Speed > b.Stats.Speed
 
+  log.Println(a, b, atkA, atkB)
+
   for hpA > 0 && hpB > 0 {
+
     if(aFaster) {
       hpB -= atkA
       if(hpB <= 0) {
