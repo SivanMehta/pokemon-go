@@ -7,8 +7,10 @@ import (
 )
 
 func main() {
-  result := battle.Add(1, 2)
-  log.Println(result)
+  battles := make(chan int, 1)
+  battle.Battle(pokemon.Dummies[0], pokemon.Dummies[1], battles)
 
-  log.Println(pokemon.Dummies)
+  result := <-battles
+
+  log.Println(result)
 }

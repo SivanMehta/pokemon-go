@@ -4,5 +4,5 @@ build:
 dev: build
 	./pokemon.out
 
-test:
-	go test -v ./battle/
+simulation:
+	./pokemon.out
