@@ -2,6 +2,7 @@ package battle
 
 import (
   "log"
+  "math/rand"
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
 
@@ -11,8 +12,8 @@ const basePower = 100
 // of the attacker and the defender
 //
 // returns and int representing the highest possible damange
-func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) int {
-  var base int
+func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) float64 {
+  var base float64
 
   // use the type that will do the most damage (remember that all moves are STAB)
   primary := defender.Multiplier(attacker.Primary, basePower)
@@ -31,9 +32,8 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) int {
 
   // use the actual battle damage formula to calculate damage
   // based on the physical / special split
-  // TODO: change 1 to .84 and all the ints to floats
-  physicalDamage := (1 * base * atk / def) + 2
-  specialDamage := (1 * base * spAtk / spDef) + 2
+  physicalDamage := (.84 * base * atk / def) + 2.0
+  specialDamage := (.84 * base * spAtk / spDef) + 2.0
 
   if physicalDamage > specialDamage {
     return physicalDamage
@@ -48,9 +48,9 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) int {
 // most damaging attack
 //
 // if the result > 0, a has won, if it is < 0, b has won
-func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan int) {
-  hpA := a.Stats.HP
-  hpB := b.Stats.HP
+func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan float64) {
+  hpA := pokemon.HpStat(a.Stats.HP)
+  hpB := pokemon.HpStat(b.Stats.HP)
   atkA := optimalAttack(a, b)
   atkB := optimalAttack(b, a)
   aFaster := a.Stats.Speed > b.Stats.Speed
@@ -58,18 +58,24 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan int) {
   log.Println(a, a.Stats, b, b.Stats, atkA, atkB)
 
   for hpA > 0 && hpB > 0 {
-    // TODO: random multipliers
+    multiplier := (217 + rand.Float64() * 38.0) / 255.0
+    if rand.Intn(16) < 1 {
+      multiplier *= 1.5
+    }
+
     if(aFaster) {
-      hpB -= atkA
+      hpB -= atkA * multiplier
       if(hpB <= 0) {
       // break in the middle of the turn because b has fainted
         break;
       }
-      hpA -= atkB
+      hpA -= atkB * multiplier
     } else {
-      hpA -= atkB
-      hpB -= atkA
+      hpA -= atkB * multiplier
+      hpB -= atkA * multiplier
     }
+
+    log.Println(hpA, hpB)
   }
 
   done <- hpA - hpB

@@ -21,7 +21,7 @@ func generation() []*pokemon.Pokemon {
 }
 
 func main() {
-  battles := make(chan int, 1)
+  battles := make(chan float64, 1)
   battle.Battle(pokemon.Dummies[0], pokemon.Dummies[1], battles)
 
   result := <-battles

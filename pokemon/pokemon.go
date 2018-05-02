@@ -41,29 +41,29 @@ func (p Pokemon) String() string {
 }
 
 // outputs damage multiplier of an attack, given a basepower
-func (p Pokemon) Multiplier(attack *PokeType, basepower int) int {
+func (p Pokemon) Multiplier(attack *PokeType, basepower float64) float64 {
   base := basepower
   for i := 0; i < len(p.Primary.Weaknesses); i ++ {
     if(attack == p.Primary.Weaknesses[i]) {
-      base *= 2
+      base *= 2.0
     }
   }
 
   for i := 0; i < len(p.Secondary.Weaknesses); i ++ {
     if(attack == p.Secondary.Weaknesses[i]) {
-      base *= 2
+      base *= 2.0
     }
   }
 
   for i := 0; i < len(p.Primary.Resistances); i ++ {
     if(attack == p.Primary.Resistances[i]) {
-      base /= 2
+      base /= 2.0
     }
   }
 
   for i := 0; i < len(p.Secondary.Resistances); i ++ {
     if(attack == p.Secondary.Resistances[i]) {
-      base /= 2
+      base /= 2.0
     }
   }
 
@@ -84,15 +84,15 @@ var (
 // calculate the HP stat given a base stat
 // for our purposes evs and ivs are all always maxed out
 // and we always have a neutral nature at level 100
-func HpStat(base int) int {
-  return ((base + 31) * 2 + 4) + 100 + 10
+func HpStat(base int) float64 {
+  return float64(((base + 31) * 2 + 4) + 100 + 10)
 }
 
 // calculate the actual stat given a base stat
 // for our purposes evs and ivs are all always maxed out
 // and we always have a neutral nature at level 100
-func Stat(base int) int {
-  return ((base + 31) * 2 + 4) + 5
+func Stat(base int) float64 {
+  return float64(((base + 31) * 2 + 4) + 5)
 }
 
 func stat() int {
