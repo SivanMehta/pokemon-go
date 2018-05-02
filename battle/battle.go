@@ -24,11 +24,16 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) int {
     base = secondary
   }
 
+  atk := pokemon.Stat(attacker.Stats.Atk)
+  def := pokemon.Stat(defender.Stats.Atk)
+  spAtk := pokemon.Stat(attacker.Stats.SpAtk)
+  spDef := pokemon.Stat(defender.Stats.SpDef)
+
   // use the actual battle damage formula to calculate damage
   // based on the physical / special split
   // TODO: change 1 to .84 and all the ints to floats
-  physicalDamage := (1 * base * attacker.Stats.Atk / defender.Stats.Def) + 2
-  specialDamage := (1 * base * attacker.Stats.SpAtk / defender.Stats.SpDef) + 2
+  physicalDamage := (1 * base * atk / def) + 2
+  specialDamage := (1 * base * spAtk / spDef) + 2
 
   if physicalDamage > specialDamage {
     return physicalDamage

@@ -1,6 +1,7 @@
 package pokemon
 
 import (
+  "math"
   "math/rand"
   "fmt"
   "time"
@@ -80,21 +81,27 @@ var (
   Dummies [population]*Pokemon
 )
 
+// calculate the HP stat given a base stat
 // for our purposes evs and ivs are all always maxed out
 // and we always have a neutral nature at level 100
-func hpStat() int {
-  base := rand.Intn(255)
+func HpStat(base int) int {
   return ((base + 31) * 2 + 4) + 100 + 10
 }
 
-func stat() int {
-  base := rand.Intn(255)
+// calculate the actual stat given a base stat
+// for our purposes evs and ivs are all always maxed out
+// and we always have a neutral nature at level 100
+func Stat(base int) int {
   return ((base + 31) * 2 + 4) + 5
+}
+
+func stat() int {
+  return int(math.Ceil(rand.NormFloat64() * 10 + 100) + .5)
 }
 
 func generatePokemon() *Pokemon {
   stats := Stats{ 
-    HP: hpStat(),
+    HP: stat(),
     Atk: stat(),
     Def: stat(),
     SpAtk: stat(),
