@@ -17,14 +17,22 @@ import (
 //
 // Finally, we randomly breed the remaining pokemon to fill out the remaining population
 func generation() []*pokemon.Pokemon {
-  return make([]*pokemon.Pokemon, len(pokemon.Population))
+  nextGeneration := make([]*pokemon.Pokemon, len(pokemon.Population))
+  poke := pokemon.Population[0]
+
+  // do one pokemon's loop right now
+  results := make([]float64, len(pokemon.Population))
+
+  for j, otherPoke := range pokemon.Population {
+    channel := make(chan float64)
+    go battle.Battle(poke, otherPoke, channel)
+    results[j] = <- channel
+  }
+
+  log.Println(results)
+  return nextGeneration
 }
 
 func main() {
-  battles := make(chan float64, 1)
-  battle.Battle(pokemon.Population[0], pokemon.Population[1], battles)
-
-  result := <-battles
-
-  log.Println(result)
+  generation()
 }

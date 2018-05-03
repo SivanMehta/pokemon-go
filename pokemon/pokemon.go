@@ -7,7 +7,7 @@ import (
   "time"
 )
 
-const population = 1000
+const population = 10
 
 type PokeType struct {
   Name string
@@ -37,7 +37,8 @@ type Pokemon struct {
 
 // prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
-  return fmt.Sprintf("%s, %s", p.Primary.Name, p.Secondary.Name)
+  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name, 
+    p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
 }
 
 // outputs damage multiplier of an attack, given a basepower

@@ -48,14 +48,13 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) float64
 // most damaging attack
 //
 // if the result > 0, a has won, if it is < 0, b has won
-func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan float64) {
+func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan<- float64) {
+  log.Println("Battling", a, b)
   hpA := pokemon.HpStat(a.Stats.HP)
   hpB := pokemon.HpStat(b.Stats.HP)
   atkA := optimalAttack(a, b)
   atkB := optimalAttack(b, a)
   aFaster := a.Stats.Speed > b.Stats.Speed
-
-  log.Println(a, a.Stats, b, b.Stats, atkA, atkB)
 
   for hpA > 0 && hpB > 0 {
     multiplier := (217 + rand.Float64() * 38.0) / 255.0
@@ -74,8 +73,6 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan float64) {
       hpA -= atkB * multiplier
       hpB -= atkA * multiplier
     }
-
-    log.Println(hpA, hpB)
   }
 
   done <- hpA - hpB
