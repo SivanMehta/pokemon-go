@@ -20,11 +20,17 @@ func generation() []*pokemon.Pokemon {
   census := len(pokemon.Population)
   nextGeneration := make([]*pokemon.Pokemon, census)
 
+  // TODO: make results a list of sortable elements
+  // https://gobyexample.com/sorting-by-functions
+  results := make(map[int]float64)
+
   for i, _ := range pokemon.Population {
     fitness := make(chan float64)
     go battle.Fitness(i, fitness)
-    log.Println(<-fitness)
+    results[i] = <-fitness
   }
+
+  log.Println(results)
   return nextGeneration
 }
 
