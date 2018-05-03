@@ -1,7 +1,7 @@
 package battle
 
 import (
-  "log"
+  // "log"
   "math/rand"
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
@@ -49,7 +49,7 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) float64
 //
 // if the result > 0, a has won, if it is < 0, b has won
 func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan<- float64) {
-  log.Println("Battling", a, b)
+  // log.Println("Battling", a, b)
   hpA := pokemon.HpStat(a.Stats.HP)
   hpB := pokemon.HpStat(b.Stats.HP)
   atkA := optimalAttack(a, b)
