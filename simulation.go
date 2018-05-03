@@ -2,10 +2,33 @@ package main
 
 import (
   "log"
+  "fmt"
   // "math/rand"
+  "sort"
   "github.com/SivanMehta/pokemon-go/battle"
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
+
+type sortable struct {
+  Origin int
+  Fitness float64
+}
+
+func (s sortable) String() string {
+  return fmt.Sprintf("(%d %2f)", s.Origin, s.Fitness)
+}
+
+type sorter []*sortable
+
+func (s sorter) Len() int {
+    return len(s)
+}
+func (s sorter) Swap(i, j int) {
+    s[i], s[j] = s[j], s[i]
+}
+func (s sorter) Less(i, j int) bool {
+    return s[i].Fitness > s[j].Fitness
+}
 
 // First, Have every pokemon battle every other one
 // and accumulate the results into their fitness attribute
@@ -20,15 +43,15 @@ func generation() []*pokemon.Pokemon {
   census := len(pokemon.Population)
   nextGeneration := make([]*pokemon.Pokemon, census)
 
-  // TODO: make results a list of sortable elements
-  // https://gobyexample.com/sorting-by-functions
-  results := make(map[int]float64)
+  results := make([]*sortable, census)
 
   for i, _ := range pokemon.Population {
     fitness := make(chan float64)
     go battle.Fitness(i, fitness)
-    results[i] = <-fitness
+    results[i] = &sortable{ Origin: i, Fitness: <-fitness }
   }
+
+  sort.Sort(sorter(results))
 
   log.Println(results)
   return nextGeneration
