@@ -36,6 +36,7 @@ func (s sorter) Less(i, j int) bool {
 // cutoff: arbitrarily cut off 1/2 of population
 // crossover / breeding:
 //  - 2 out of the 4 types between the parents
+//    - mutation might randomly pick a type
 //  - avg of parents' stats + some noise so we don't regress
 func generation() {
   // setup general variable

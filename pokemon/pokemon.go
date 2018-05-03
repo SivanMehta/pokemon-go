@@ -32,7 +32,6 @@ type Pokemon struct {
   Primary *PokeType
   Secondary *PokeType
   Stats Stats
-  fitness float64
 }
 
 // prints out primary and secondary type of a pokemon
