@@ -20,17 +20,10 @@ func generation() []*pokemon.Pokemon {
   census := len(pokemon.Population)
   nextGeneration := make([]*pokemon.Pokemon, census)
 
-  for _, poke := range pokemon.Population {
-    total := float64(0)
-
-    for _, otherPoke := range pokemon.Population {
-      channel := make(chan float64)
-      go battle.Battle(poke, otherPoke, channel)
-      total = <- channel
-    }
-
-    fitness := total / float64(census)
-    log.Println(fitness)
+  for i, _ := range pokemon.Population {
+    fitness := make(chan float64)
+    go battle.Fitness(i, fitness)
+    log.Println(<-fitness)
   }
   return nextGeneration
 }

@@ -48,7 +48,7 @@ func optimalAttack(attacker *pokemon.Pokemon, defender *pokemon.Pokemon) float64
 // most damaging attack
 //
 // if the result > 0, a has won, if it is < 0, b has won
-func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan<- float64) {
+func battle(a *pokemon.Pokemon, b *pokemon.Pokemon) float64 {
   // log.Println("Battling", a, b)
   hpA := pokemon.HpStat(a.Stats.HP)
   hpB := pokemon.HpStat(b.Stats.HP)
@@ -75,5 +75,17 @@ func Battle(a *pokemon.Pokemon, b *pokemon.Pokemon, done chan<- float64) {
     }
   }
 
-  done <- hpA - hpB
+  return hpA - hpB
+}
+
+// given an index i, get the fitness of the pokemon at that index
+func Fitness(i int, done chan<- float64) {
+  total := float64(0)
+  poke := pokemon.Population[i]
+
+  for _, otherPoke := range pokemon.Population {
+    total += battle(poke, otherPoke)
+  }
+
+  done <- total / float64(len(pokemon.Population))
 }
