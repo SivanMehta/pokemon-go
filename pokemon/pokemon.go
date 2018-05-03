@@ -7,7 +7,7 @@ import (
   "time"
 )
 
-const population = 1000
+const population = 20
 
 type PokeType struct {
   Name string

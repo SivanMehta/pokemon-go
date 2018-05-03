@@ -30,31 +30,38 @@ func (s sorter) Less(i, j int) bool {
     return s[i].Fitness > s[j].Fitness
 }
 
-// First, Have every pokemon battle every other one
-// and accumulate the results into their fitness attribute
-// each battle can be run inside a goroutine because battle.Battle
-// takes a channel that "returns" the result of each battle
-// that way we can avoid using a mutex locking the counter appropriately
-//
-// Then, we we sort each pokemon by their fitness and drop the bottom 50%
-//
-// Finally, we randomly breed the remaining pokemon to fill out the remaining population
-func generation() []*pokemon.Pokemon {
+// does one generation of a genetic algorithm, modifying pokemon.Pokemon in place
+// population: a group of a valid Pokemon
+// fitness: sum total of battle scores against all other pokemon
+// cutoff: arbitrarily cut off 1/2 of population
+// crossover / breeding:
+//  - 2 out of the 4 types between the parents
+//  - avg of parents' stats + some noise so we don't regress
+func generation() {
+  // setup general variable
   census := len(pokemon.Population)
   nextGeneration := make([]*pokemon.Pokemon, census)
 
-  results := make([]*sortable, census)
-
+  // concurrently gather fitness for each pokemon
+  fitnessResults := make([]*sortable, census)
   for i, _ := range pokemon.Population {
     fitness := make(chan float64)
     go battle.Fitness(i, fitness)
-    results[i] = &sortable{ Origin: i, Fitness: <-fitness }
+    fitnessResults[i] = &sortable{ Origin: i, Fitness: <-fitness }
   }
 
-  sort.Sort(sorter(results))
+  // cull half of the population
+  sort.Sort(sorter(fitnessResults))
+  for i, result := range fitnessResults {
+    if i > census / 2 {
+      break
+    }
+    nextGeneration[i] = pokemon.Population[result.Origin]
+  }
+  log.Println(nextGeneration)
 
-  log.Println(results)
-  return nextGeneration
+  // breed to fill out the rest
+  // replace pokemon.Pokemon IN PLACE
 }
 
 func main() {
