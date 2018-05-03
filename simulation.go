@@ -17,12 +17,12 @@ import (
 //
 // Finally, we randomly breed the remaining pokemon to fill out the remaining population
 func generation() []*pokemon.Pokemon {
-  return make([]*pokemon.Pokemon, 10)
+  return make([]*pokemon.Pokemon, len(pokemon.Population))
 }
 
 func main() {
   battles := make(chan float64, 1)
-  battle.Battle(pokemon.Dummies[0], pokemon.Dummies[1], battles)
+  battle.Battle(pokemon.Population[0], pokemon.Population[1], battles)
 
   result := <-battles
 

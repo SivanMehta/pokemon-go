@@ -78,7 +78,7 @@ var (
   Bug PokeType
   Fairy PokeType
 
-  Dummies [population]*Pokemon
+  Population [population]*Pokemon
 )
 
 // calculate the HP stat given a base stat
@@ -144,6 +144,6 @@ func init() {
   Fairy.Resistances = []*PokeType{ &Bug }
 
   for i := 0; i < population; i++ {
-    Dummies[i] = generatePokemon()
+    Population[i] = generatePokemon()
   } 
 }
