@@ -39,8 +39,9 @@ type Pokemon struct {
 
 // prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
-  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name,
-    p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
+  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name, p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
+
+  // return fmt.Sprintf("%d", p.Stats.HP + p.Stats.Atk + p.Stats.Def + p.Stats.SpAtk + p.Stats.SpDef + p.Stats.Speed)
 }
 
 func combine(a, b int) int {
@@ -52,7 +53,7 @@ func combine(a, b int) int {
 // Basic combination of two pokemon
 //  - 2 out of the 4 types between the parents
 //    - mutation might randomly pick a type
-//  - avg of parents' stats + some noise so we don't regresscreation
+//  - avg of parents' stats + some noise so we don't regress
 //
 // For simplicity's sake, we're assuming that every pair is compatible
 func (p Pokemon) Breed(partner *Pokemon) *Pokemon {

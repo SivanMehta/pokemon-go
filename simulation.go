@@ -10,7 +10,7 @@ import (
 )
 
 const (
-  generations = 10
+  generations = 100
 )
 
 type sortable struct {
@@ -90,6 +90,6 @@ func Generation() {
 func main() {
   for i := 0; i < generations; i++ {
     Generation()
-    log.Println(pokemon.Population)
+    log.Println(pokemon.Population[0])
   }
 }
