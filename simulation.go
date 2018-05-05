@@ -3,7 +3,7 @@ package main
 import (
   "log"
   "fmt"
-  // "math/rand"
+  "math/rand"
   "sort"
   "github.com/SivanMehta/pokemon-go/battle"
   "github.com/SivanMehta/pokemon-go/pokemon"
@@ -30,15 +30,28 @@ func (s sorter) Less(i, j int) bool {
     return s[i].Fitness > s[j].Fitness
 }
 
+// Randomly breed pokemon until the population is filled out
+func Breed(nextGeneration []*pokemon.Pokemon) {
+  census := len(nextGeneration)
+  population := (census / 2)
+  left := census - population
+
+  for left < census {
+    father := nextGeneration[rand.Intn(population - 1)]
+    mother := nextGeneration[rand.Intn(population - 1)]
+    baby := father.Breed(mother)
+
+    log.Println(baby)
+
+    left += 1
+  }
+}
+
 // does one generation of a genetic algorithm, modifying pokemon.Pokemon in place
 // population: a group of a valid Pokemon
 // fitness: sum total of battle scores against all other pokemon
 // cutoff: arbitrarily cut off 1/2 of population
-// crossover / breeding:
-//  - 2 out of the 4 types between the parents
-//    - mutation might randomly pick a type
-//  - avg of parents' stats + some noise so we don't regress
-func generation() {
+func Generation() {
   // setup general variable
   census := len(pokemon.Population)
   nextGeneration := make([]*pokemon.Pokemon, census)
@@ -59,12 +72,11 @@ func generation() {
     }
     nextGeneration[i] = pokemon.Population[result.Origin]
   }
-  log.Println(nextGeneration)
 
   // breed to fill out the rest
-  // replace pokemon.Pokemon IN PLACE
+  Breed(nextGeneration)
 }
 
 func main() {
-  generation()
+  Generation()
 }

@@ -7,7 +7,10 @@ import (
   "time"
 )
 
-const population = 20
+const (
+  population = 10
+  mutationRate = .1
+)
 
 type PokeType struct {
   Name string
@@ -36,8 +39,35 @@ type Pokemon struct {
 
 // prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
-  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name, 
+  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name,
     p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
+}
+
+// Basic combination of two pokemon
+//  - 2 out of the 4 types between the parents
+//    - mutation might randomly pick a type
+//  - avg of parents' stats + some noise so we don't regresscreation
+//
+// For simplicity's sake, we're assuming that every pair is compatible
+func (p Pokemon) Breed(partner *Pokemon) *Pokemon {
+  possibleTypes := [4]*PokeType{ p.Primary, p.Secondary, partner.Primary, p.Secondary }
+  var baby Pokemon
+
+  // choose one of parents' types, potentially mutating
+  if rand.Float64() > mutationRate {
+    baby.Primary = possibleTypes[rand.Intn(len(possibleTypes))]
+  } else {
+    baby.Primary = PossibleTypes[rand.Intn(len(PossibleTypes))]
+  }
+
+  // choose one of parents' types, potentially mutating
+  if rand.Float64() > mutationRate {
+    baby.Secondary = possibleTypes[rand.Intn(len(possibleTypes))]
+  } else {
+    baby.Secondary = PossibleTypes[rand.Intn(len(PossibleTypes))]
+  }
+
+  return &baby
 }
 
 // outputs damage multiplier of an attack, given a basepower
@@ -79,6 +109,7 @@ var (
   Fairy PokeType
 
   Population [population]*Pokemon
+  PossibleTypes [6]*PokeType
 )
 
 // calculate the HP stat given a base stat
@@ -100,7 +131,7 @@ func stat() int {
 }
 
 func generatePokemon() *Pokemon {
-  stats := Stats{ 
+  stats := Stats{
     HP: stat(),
     Atk: stat(),
     Def: stat(),
@@ -109,13 +140,8 @@ func generatePokemon() *Pokemon {
     Speed: stat(),
   }
 
-  types := [...]*PokeType{
-    &Fire, &Water, &Grass,
-    &Steel, &Bug, &Fairy,
-  }
-
-  primary := types[rand.Intn(len(types))]
-  secondary := types[rand.Intn(len(types))]
+  primary := PossibleTypes[rand.Intn(len(PossibleTypes))]
+  secondary := PossibleTypes[rand.Intn(len(PossibleTypes))]
 
   return &Pokemon{ Primary: primary, Secondary: secondary, Stats: stats }
 }
@@ -143,7 +169,12 @@ func init() {
   Bug.Resistances = []*PokeType{ &Grass }
   Fairy.Resistances = []*PokeType{ &Bug }
 
+  PossibleTypes = [...]*PokeType{
+    &Fire, &Water, &Grass,
+    &Steel, &Bug, &Fairy,
+  }
+
   for i := 0; i < population; i++ {
     Population[i] = generatePokemon()
-  } 
+  }
 }
