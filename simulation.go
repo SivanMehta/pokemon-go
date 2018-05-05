@@ -9,6 +9,10 @@ import (
   "github.com/SivanMehta/pokemon-go/pokemon"
 )
 
+const (
+  generations = 10
+)
+
 type sortable struct {
   Origin int
   Fitness float64
@@ -34,16 +38,22 @@ func (s sorter) Less(i, j int) bool {
 func Breed(nextGeneration []*pokemon.Pokemon) {
   census := len(nextGeneration)
   population := (census / 2)
-  left := census - population
+  left := population
 
   for left < census {
     father := nextGeneration[rand.Intn(population - 1)]
     mother := nextGeneration[rand.Intn(population - 1)]
     baby := father.Breed(mother)
-
-    log.Println(baby)
+    nextGeneration[left] = baby
 
     left += 1
+  }
+
+  // place new pokemon into pokemon.Population
+  // essentially copying nextGeneration into pokemon.Population
+
+  for i, poke := range nextGeneration {
+    pokemon.Population[i] = poke
   }
 }
 
@@ -78,5 +88,8 @@ func Generation() {
 }
 
 func main() {
-  Generation()
+  for i := 0; i < generations; i++ {
+    Generation()
+    log.Println(pokemon.Population)
+  }
 }

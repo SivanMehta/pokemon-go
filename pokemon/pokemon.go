@@ -8,7 +8,7 @@ import (
 )
 
 const (
-  population = 10
+  population = 20
   mutationRate = .1
 )
 
@@ -43,6 +43,12 @@ func (p Pokemon) String() string {
     p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
 }
 
+func combine(a, b int) int {
+  noise := int(math.Ceil(rand.NormFloat64() * 5) + .5)
+  avg := (a + b) / 2
+  return noise + avg
+}
+
 // Basic combination of two pokemon
 //  - 2 out of the 4 types between the parents
 //    - mutation might randomly pick a type
@@ -65,6 +71,15 @@ func (p Pokemon) Breed(partner *Pokemon) *Pokemon {
     baby.Secondary = possibleTypes[rand.Intn(len(possibleTypes))]
   } else {
     baby.Secondary = PossibleTypes[rand.Intn(len(PossibleTypes))]
+  }
+
+  baby.Stats = Stats{
+    HP: combine(p.Stats.HP, partner.Stats.HP),
+    Atk: combine(p.Stats.Atk, partner.Stats.Atk),
+    Def: combine(p.Stats.Def, partner.Stats.Def),
+    SpAtk: combine(p.Stats.SpAtk, partner.Stats.SpAtk),
+    SpDef: combine(p.Stats.SpDef, partner.Stats.SpDef),
+    Speed: combine(p.Stats.Speed, partner.Stats.Speed),
   }
 
   return &baby

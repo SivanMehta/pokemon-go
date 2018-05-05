@@ -49,8 +49,7 @@ Not yet decided, but we can just run the simulation over many generations and tr
 
 # Todo
 
-- crossover / breeding
-- multiple generations
+- print BST of top 10
 
 # Future Work / Nice to Haves
 
