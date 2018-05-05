@@ -39,9 +39,12 @@ type Pokemon struct {
 
 // prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
-  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d", p.Primary.Name, p.Secondary.Name, p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
+  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d (%d)", p.Primary.Name, p.Secondary.Name, p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed, p.BST())
+}
 
-  // return fmt.Sprintf("%d", p.Stats.HP + p.Stats.Atk + p.Stats.Def + p.Stats.SpAtk + p.Stats.SpDef + p.Stats.Speed)
+// Base Stat Total for this pokemon
+func (p Pokemon) BST() int {
+  return p.Stats.HP + p.Stats.Atk + p.Stats.Def + p.Stats.SpAtk + p.Stats.SpDef + p.Stats.Speed
 }
 
 func combine(a, b int) int {

@@ -10,7 +10,7 @@ import (
 )
 
 const (
-  generations = 100
+  generations = 200
 )
 
 type sortable struct {
@@ -90,6 +90,14 @@ func Generation() {
 func main() {
   for i := 0; i < generations; i++ {
     Generation()
-    log.Println(pokemon.Population[0])
+    highest := 0
+    var best *pokemon.Pokemon
+    for _, poke := range pokemon.Population {
+      if poke.BST() > highest {
+        best = poke
+      }
+    }
+
+    log.Println(best)
   }
 }

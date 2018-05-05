@@ -49,7 +49,6 @@ Not yet decided, but we can just run the simulation over many generations and tr
 
 # Todo
 
-- Print out top pokemon at the end of each generation
 - add all the original types
 
 # Future Work / Nice to Haves
