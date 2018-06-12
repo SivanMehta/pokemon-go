@@ -9,7 +9,7 @@ import (
 )
 
 const (
-  generations = 200
+  generations = 1000
 )
 
 type sortable struct {

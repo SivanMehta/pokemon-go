@@ -12,6 +12,12 @@ make
 ```sh
 # run the built binary
 make simulation
+
+# generate data.csv for visualization
+make data.csv
+
+# generate the visualization itself
+make stat-generation.png
 ```
 
 # Implementation Specific Details
@@ -45,6 +51,12 @@ We "crossover" two genomes by simply averaging their stats and adding a little n
 ## Termination
 
 Not yet decided, but we can just run the simulation over many generations and try and visualize some of the trends that may occur.
+
+## Visualization
+
+By printing out the "top" Pokemon in each generation, we can get a rough estimate of the progression of stats. Here we have the Speed in yellow, Physical stats in blue, Special stats in green, and HP in red.
+
+![](stat-progression.png)
 
 # Todo
 
