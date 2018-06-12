@@ -48,7 +48,6 @@ Not yet decided, but we can just run the simulation over many generations and tr
 
 # Todo
 
-- add all the original types
 - Pick one of the below nice to haves
 
 # Future Work / Nice to Haves

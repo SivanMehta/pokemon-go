@@ -4,7 +4,6 @@ import (
   "math"
   "math/rand"
   "fmt"
-  "time"
 )
 
 const (
@@ -12,16 +11,6 @@ const (
   mutationRate = .1
   BST = 600
 )
-
-type PokeType struct {
-  Name string
-  Weaknesses []*PokeType
-  Resistances []*PokeType
-}
-
-func (b PokeType) String() string {
-  return b.Name
-}
 
 type Stats struct {
   HP int
@@ -135,21 +124,23 @@ func (p Pokemon) Multiplier(attack *PokeType, basepower float64) float64 {
     }
   }
 
+  for i := 0; i < len(p.Primary.Immunities); i ++ {
+    if(attack == p.Primary.Immunities[i]) {
+      base = 0.0
+    }
+  }
+
+  for i := 0; i < len(p.Secondary.Immunities); i ++ {
+    if(attack == p.Secondary.Immunities[i]) {
+      base = 0.0
+    }
+  }
+
   return base
 }
 
 var (
-  Water PokeType
-  Fire PokeType
-  Grass PokeType
-  Steel PokeType
-  Bug PokeType
-  Fairy PokeType
-  Dark PokeType
-  Ghost PokeType
-
   Population [population]*Pokemon
-  PossibleTypes [8]*PokeType
 )
 
 // calculate the HP stat given a base stat
@@ -187,44 +178,4 @@ func generatePokemon() *Pokemon {
   secondary := PossibleTypes[rand.Intn(len(PossibleTypes))]
 
   return &Pokemon{ Primary: primary, Secondary: secondary, Stats: stats }
-}
-
-func init() {
-  rand.Seed(time.Now().UTC().UnixNano())
-  Water.Name = "Water"
-  Fire.Name = "Fire"
-  Grass.Name = "Grass"
-  Steel.Name = "Steel"
-  Bug.Name = "Bug"
-  Fairy.Name = "Fairy"
-  Dark.Name = "Dark"
-  Ghost.Name = "Ghost"
-
-  Water.Weaknesses = []*PokeType{ &Grass }
-  Fire.Weaknesses = []*PokeType{ &Water }
-  Grass.Weaknesses = []*PokeType{ &Fire, &Bug }
-  Steel.Weaknesses = []*PokeType{ &Fire }
-  Bug.Weaknesses = []*PokeType{ &Fire }
-  Fairy.Weaknesses = []*PokeType{ &Steel }
-  Dark.Weaknesses = []*PokeType{ &Bug }
-  Ghost.Weaknesses = []*PokeType{ &Bug }
-
-  Water.Resistances = []*PokeType{ &Water, &Fire }
-  Fire.Resistances = []*PokeType{ &Fire, &Grass }
-  Grass.Resistances = []*PokeType{ &Grass, &Water }
-  Steel.Resistances = []*PokeType{ &Steel, &Bug, &Fairy }
-  Bug.Resistances = []*PokeType{ &Grass }
-  Fairy.Resistances = []*PokeType{ &Bug }
-  Dark.Resistances = []*PokeType{ }
-  Ghost.Weaknesses = []*PokeType{ &Dark, &Ghost }
-
-  PossibleTypes = [...]*PokeType{
-    &Fire, &Water, &Grass,
-    &Steel, &Bug, &Fairy,
-    &Dark, &Ghost,
-  }
-
-  for i := 0; i < population; i++ {
-    Population[i] = generatePokemon()
-  }
 }
