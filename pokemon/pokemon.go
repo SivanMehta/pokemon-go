@@ -67,19 +67,19 @@ func scale(stats Stats, bst int) Stats {
 //
 // For simplicity's sake, we're assuming that every pair is compatible
 func (p Pokemon) Breed(partner *Pokemon) *Pokemon {
-  possibleTypes := [4]*PokeType{ p.Primary, p.Secondary, partner.Primary, p.Secondary }
+  parentTypes := [4]*PokeType{ p.Primary, p.Secondary, partner.Primary, p.Secondary }
   var baby Pokemon
 
   // choose one of parents' types, potentially mutating
   if rand.Float64() > mutationRate {
-    baby.Primary = possibleTypes[rand.Intn(len(possibleTypes))]
+    baby.Primary = parentTypes[rand.Intn(len(parentTypes))]
   } else {
     baby.Primary = PossibleTypes[rand.Intn(len(PossibleTypes))]
   }
 
   // choose one of parents' types, potentially mutating
   if rand.Float64() > mutationRate {
-    baby.Secondary = possibleTypes[rand.Intn(len(possibleTypes))]
+    baby.Secondary = parentTypes[rand.Intn(len(parentTypes))]
   } else {
     baby.Secondary = PossibleTypes[rand.Intn(len(PossibleTypes))]
   }
