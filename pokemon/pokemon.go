@@ -8,8 +8,9 @@ import (
 )
 
 const (
-  population = 20
+  population = 100
   mutationRate = .1
+  BST = 600
 )
 
 type PokeType struct {
@@ -39,18 +40,35 @@ type Pokemon struct {
 
 // prints out primary and secondary type of a pokemon
 func (p Pokemon) String() string {
-  return fmt.Sprintf("%s, %s: %d %d %d %d %d %d (%d)", p.Primary.Name, p.Secondary.Name, p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed, p.BST())
-}
-
-// Base Stat Total for this pokemon
-func (p Pokemon) BST() int {
-  return p.Stats.HP + p.Stats.Atk + p.Stats.Def + p.Stats.SpAtk + p.Stats.SpDef + p.Stats.Speed
+  return fmt.Sprintf("%s,%s,%d,%d,%d,%d,%d,%d", p.Primary.Name, p.Secondary.Name, p.Stats.HP, p.Stats.Atk, p.Stats.Def, p.Stats.SpAtk, p.Stats.SpDef, p.Stats.Speed)
 }
 
 func combine(a, b int) int {
   noise := int(math.Ceil(rand.NormFloat64() * 5) + .5)
-  avg := (a + b) / 2
-  return noise + avg
+  avg := noise + (a + b) / 2
+  if avg < 0 {
+    return 0
+  } else {
+    return avg
+  }
+}
+
+func scale(stats Stats, bst int) Stats {
+  total := stats.HP +
+           stats.Atk +
+           stats.Def +
+           stats.SpAtk +
+           stats.SpDef +
+           stats.Speed
+
+  return Stats{
+    HP: stats.HP * bst / total,
+    Atk: stats.Atk * bst / total,
+    Def: stats.Def * bst / total,
+    SpAtk: stats.SpAtk * bst / total,
+    SpDef: stats.SpDef * bst / total,
+    Speed: stats.Speed * bst / total,
+  }
 }
 
 // Basic combination of two pokemon
@@ -77,7 +95,7 @@ func (p Pokemon) Breed(partner *Pokemon) *Pokemon {
     baby.Secondary = PossibleTypes[rand.Intn(len(PossibleTypes))]
   }
 
-  baby.Stats = Stats{
+  combinedStats := Stats{
     HP: combine(p.Stats.HP, partner.Stats.HP),
     Atk: combine(p.Stats.Atk, partner.Stats.Atk),
     Def: combine(p.Stats.Def, partner.Stats.Def),
@@ -85,6 +103,7 @@ func (p Pokemon) Breed(partner *Pokemon) *Pokemon {
     SpDef: combine(p.Stats.SpDef, partner.Stats.SpDef),
     Speed: combine(p.Stats.Speed, partner.Stats.Speed),
   }
+  baby.Stats = scale(combinedStats, BST)
 
   return &baby
 }
@@ -126,9 +145,11 @@ var (
   Steel PokeType
   Bug PokeType
   Fairy PokeType
+  Dark PokeType
+  Ghost PokeType
 
   Population [population]*Pokemon
-  PossibleTypes [6]*PokeType
+  PossibleTypes [8]*PokeType
 )
 
 // calculate the HP stat given a base stat
@@ -159,6 +180,9 @@ func generatePokemon() *Pokemon {
     Speed: stat(),
   }
 
+  // scale stats so everything is always BST = 600
+  stats = scale(stats, BST)
+
   primary := PossibleTypes[rand.Intn(len(PossibleTypes))]
   secondary := PossibleTypes[rand.Intn(len(PossibleTypes))]
 
@@ -173,6 +197,8 @@ func init() {
   Steel.Name = "Steel"
   Bug.Name = "Bug"
   Fairy.Name = "Fairy"
+  Dark.Name = "Dark"
+  Ghost.Name = "Ghost"
 
   Water.Weaknesses = []*PokeType{ &Grass }
   Fire.Weaknesses = []*PokeType{ &Water }
@@ -180,6 +206,8 @@ func init() {
   Steel.Weaknesses = []*PokeType{ &Fire }
   Bug.Weaknesses = []*PokeType{ &Fire }
   Fairy.Weaknesses = []*PokeType{ &Steel }
+  Dark.Weaknesses = []*PokeType{ &Bug }
+  Ghost.Weaknesses = []*PokeType{ &Bug }
 
   Water.Resistances = []*PokeType{ &Water, &Fire }
   Fire.Resistances = []*PokeType{ &Fire, &Grass }
@@ -187,10 +215,13 @@ func init() {
   Steel.Resistances = []*PokeType{ &Steel, &Bug, &Fairy }
   Bug.Resistances = []*PokeType{ &Grass }
   Fairy.Resistances = []*PokeType{ &Bug }
+  Dark.Resistances = []*PokeType{ }
+  Ghost.Weaknesses = []*PokeType{ &Dark, &Ghost }
 
   PossibleTypes = [...]*PokeType{
     &Fire, &Water, &Grass,
     &Steel, &Bug, &Fairy,
+    &Dark, &Ghost,
   }
 
   for i := 0; i < population; i++ {

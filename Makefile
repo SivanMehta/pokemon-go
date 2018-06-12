@@ -3,4 +3,4 @@ pokemon.out:
 
 .PHONY: simulation
 simulation: pokemon.out
-	./pokemon.out
+	@./pokemon.out
