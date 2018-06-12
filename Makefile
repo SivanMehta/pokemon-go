@@ -1,8 +1,6 @@
-build:
+pokemon.out:
 	go build -o pokemon.out simulation.go
 
-dev: build
-	./pokemon.out
-
-simulation:
+.PHONY: simulation
+simulation: pokemon.out
 	./pokemon.out

@@ -4,7 +4,7 @@
 
 ```sh
 # generate a binary that contains the entire simulation
-make build
+make
 ```
 
 # Running
@@ -12,9 +12,6 @@ make build
 ```sh
 # run the built binary
 make simulation
-
-# or you can run this to build and then immediately run the simulation
-make dev
 ```
 
 # Implementation Specific Details
